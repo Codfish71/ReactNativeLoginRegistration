@@ -9,11 +9,57 @@ import {
 } from "react-native";
 
 export default function WelcomeScreen() {
-    const navigation = useNavigation();
+
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      "first_name": "Prathamesh",
+      "last_name": "Pendal"
+    })
+  };
+
+  const getRequestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+
+  }
+
+  const postExample = async () => {
+
+    try {
+      await fetch(
+        'http://192.168.7.148:3000/rpi', requestOptions)
+        .then(response => {
+          response.json()
+            .then(data => {
+
+              try {
+                fetch(
+                  'http://192.168.7.148:5000/', getRequestOptions)
+                  .then(response => {
+                    response.json()
+                      .then(data => {
+                        console.log(JSON.stringify(data))
+                      });
+                  })
+              }
+              catch (error) {
+                console.error(error);
+              }
+            });
+        })
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+
+  const navigation = useNavigation();
   return (
     <SafeAreaView
       className="flex-1"
-      style={{ backgroundColor: "#7b71f9"}}
+      style={{ backgroundColor: "#7b71f9" }}
     >
       <View className="flex-1 flex justify-around my-4">
         <Text className="text-white font-bold text-4xl text-center">
@@ -27,9 +73,9 @@ export default function WelcomeScreen() {
           />
         </View>
         <View className="space-y-4">
-          <TouchableOpacity className="py-3 bg-yellow-400 m-7 rounded-xl" onPress={() => navigation.navigate('SignUp')}>
+          <TouchableOpacity className="py-3 bg-yellow-400 m-7 rounded-xl" onPress={postExample}>
             <Text className="text-xl font-bold text-center text-gray-700">
-              Sign Up
+              Make An Order
             </Text>
           </TouchableOpacity>
           <View className="flex-row justify-center">
